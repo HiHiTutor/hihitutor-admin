@@ -2,6 +2,10 @@ import { fetchUtils } from "react-admin";
 
 const apiUrl = 'https://hihitutor-backend.onrender.com/api';
 
+import { fetchUtils } from "react-admin";
+
+const apiUrl = 'https://hihitutor-backend.onrender.com/api';
+
 const httpClient = async (url, options = {}) => {
   options.headers = new Headers(options.headers || {});
 
@@ -26,7 +30,7 @@ const httpClient = async (url, options = {}) => {
       if (refreshToken) {
         console.log("🔄 嘗試使用 Refresh Token 獲取新 Token");
         try {
-          const refreshResponse = await fetch("https://hihitutor-backend.onrender.com/api/users/refresh-token", {
+          const refreshResponse = await fetch(`${apiUrl}/users/refresh-token`, {
             method: "POST",
             body: JSON.stringify({ refreshToken }),
             headers: { "Content-Type": "application/json" },
