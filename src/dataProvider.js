@@ -2,10 +2,6 @@ import { fetchUtils } from "react-admin";
 
 const apiUrl = 'https://hihitutor-backend.onrender.com/api';
 
-import { fetchUtils } from "react-admin";
-
-const apiUrl = 'https://hihitutor-backend.onrender.com/api';
-
 const httpClient = async (url, options = {}) => {
   options.headers = new Headers(options.headers || {});
 
