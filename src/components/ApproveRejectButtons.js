@@ -2,6 +2,8 @@
 import React from "react";
 import { useNotify, useRedirect, useRecordContext } from "react-admin";
 
+const apiUrl = "https://hihitutor-backend.onrender.com/api"; // ✅ 改為正式網址
+
 const ApproveRejectButtons = () => {
   const notify = useNotify();
   const redirect = useRedirect();
@@ -9,7 +11,7 @@ const ApproveRejectButtons = () => {
 
   const handleApprove = async () => {
     try {
-      const res = await fetch(`http://localhost:5000/api/cases/${record.id}/approve`, {
+      const res = await fetch(`${apiUrl}/cases/${record.id}/approve`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
@@ -30,7 +32,7 @@ const ApproveRejectButtons = () => {
 
   const handleReject = async () => {
     try {
-      const res = await fetch(`http://localhost:5000/api/cases/${record.id}/reject`, {
+      const res = await fetch(`${apiUrl}/cases/${record.id}/reject`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
