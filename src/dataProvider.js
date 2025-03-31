@@ -26,7 +26,7 @@ const httpClient = async (url, options = {}) => {
       if (refreshToken) {
         console.log("🔄 嘗試使用 Refresh Token 獲取新 Token");
         try {
-          const refreshResponse = await fetch("http://localhost:5000/api/users/refresh-token", {
+          const refreshResponse = await fetch("https://hihitutor-backend.onrender.com/api/users/refresh-token", {ss
             method: "POST",
             body: JSON.stringify({ refreshToken }),
             headers: { "Content-Type": "application/json" },
