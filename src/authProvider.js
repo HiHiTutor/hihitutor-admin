@@ -1,20 +1,20 @@
 const authProvider = {
   // 登入：將 token 存入 localStorage
-  login: async ({ username, password }) => {
-    const loginUrl = "https://hihitutor-backend.onrender.com/api/users/login";
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ email: username, password }),
-    });
+ login: async ({ username, password }) => {
+  const loginUrl = "https://hihitutor-backend.onrender.com/api/users/login";
 
-    if (!res.ok) {
-      throw new Error("登入失敗");
-    }
+  const res = await fetch(loginUrl, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ email: username, password }),
+  });
 
-    const data = await res.json();
+  if (!res.ok) {
+    throw new Error("登入失敗");
+  }
 
-    // ✅ 改成正確的 key
-    localStorage.setItem("authToken", data.token);
+  const data = await res.json();
+  localStorage.setItem("authToken", data.token);
   },
 
   logout: () => {
