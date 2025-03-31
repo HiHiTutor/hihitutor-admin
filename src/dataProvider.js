@@ -26,7 +26,7 @@ const httpClient = async (url, options = {}) => {
       if (refreshToken) {
         console.log("🔄 嘗試使用 Refresh Token 獲取新 Token");
         try {
-          const refreshResponse = await fetch("https://hihitutor-backend.onrender.com/api/users/refresh-token", {ss
+          const refreshResponse = await fetch("https://hihitutor-backend.onrender.com/api/users/refresh-token", {
             method: "POST",
             body: JSON.stringify({ refreshToken }),
             headers: { "Content-Type": "application/json" },
@@ -107,76 +107,74 @@ const dataProvider = {
     }
   },
 
- getOne: async (resource, params) => {
-  let url;
+  getOne: async (resource, params) => {
+    let url;
 
-  switch (resource) {
-    case "users":
-      url = `${apiUrl}/users/${params.id}`;
-      break;
-    case "student_cases":
-    case "tutor_cases":
-    case "pending_cases":
-    case "cases":
-      url = `${apiUrl}/cases/${params.id}`;
-      break;
-    default:
-      console.warn(`❌ 無法識別的 resource: ${resource}`);
-      return Promise.reject(new Error(`Unknown resource: ${resource}`));
-  }
-
-  console.log(`📌 dataProvider.getOne(resource: ${resource}, id: ${params.id}) => ${url}`);
-
-  try {
-    const { json } = await httpClient(url);
-    if (!json || (!json._id && !json.id)) {
-      throw new Error(`❌ 無效的 API 回應: ${JSON.stringify(json)}`);
+    switch (resource) {
+      case "users":
+        url = `${apiUrl}/users/${params.id}`;
+        break;
+      case "student_cases":
+      case "tutor_cases":
+      case "pending_cases":
+      case "cases":
+        url = `${apiUrl}/cases/${params.id}`;
+        break;
+      default:
+        console.warn(`❌ 無法識別的 resource: ${resource}`);
+        return Promise.reject(new Error(`Unknown resource: ${resource}`));
     }
 
-    return { data: { id: json._id || json.id, ...json } };
-  } catch (error) {
-    console.error(`❌ dataProvider.getOne(${resource}, ${params.id}) 發生錯誤:`, error);
-    return Promise.reject(error);
-  }
-},
+    console.log(`📌 dataProvider.getOne(resource: ${resource}, id: ${params.id}) => ${url}`);
 
+    try {
+      const { json } = await httpClient(url);
+      if (!json || (!json._id && !json.id)) {
+        throw new Error(`❌ 無效的 API 回應: ${JSON.stringify(json)}`);
+      }
 
- update: async (resource, params) => {
-  let url;
+      return { data: { id: json._id || json.id, ...json } };
+    } catch (error) {
+      console.error(`❌ dataProvider.getOne(${resource}, ${params.id}) 發生錯誤:`, error);
+      return Promise.reject(error);
+    }
+  },
 
-  switch (resource) {
-    case "users":
-      url = `${apiUrl}/users/${params.id}`;
-      break;
-    case "student_cases":
-    case "tutor_cases":
-    case "pending_cases":
-    case "cases":
-      url = `${apiUrl}/cases/${params.id}`;
-      break;
-    default:
-      console.warn(`❌ 無法識別的 resource: ${resource}`);
-      return Promise.reject(new Error(`Unknown resource: ${resource}`));
-  }
+  update: async (resource, params) => {
+    let url;
 
-  console.log(`📌 dataProvider.update(resource: ${resource}, id: ${params.id}) => ${url}`);
-  console.log("📌 發送更新數據:", params.data);
+    switch (resource) {
+      case "users":
+        url = `${apiUrl}/users/${params.id}`;
+        break;
+      case "student_cases":
+      case "tutor_cases":
+      case "pending_cases":
+      case "cases":
+        url = `${apiUrl}/cases/${params.id}`;
+        break;
+      default:
+        console.warn(`❌ 無法識別的 resource: ${resource}`);
+        return Promise.reject(new Error(`Unknown resource: ${resource}`));
+    }
 
-  try {
-    const { json } = await httpClient(url, {
-      method: "PUT",
-      body: JSON.stringify(params.data),
-    });
+    console.log(`📌 dataProvider.update(resource: ${resource}, id: ${params.id}) => ${url}`);
+    console.log("📌 發送更新數據:", params.data);
 
-    console.log("✅ API 更新回應:", json);
+    try {
+      const { json } = await httpClient(url, {
+        method: "PUT",
+        body: JSON.stringify(params.data),
+      });
 
-    return { data: { id: json._id || params.id, ...json } };
-  } catch (error) {
-    console.error(`❌ dataProvider.update(${resource}, ${params.id}) 發生錯誤:`, error);
-    return Promise.reject(error);
-  }
-},
+      console.log("✅ API 更新回應:", json);
 
+      return { data: { id: json._id || params.id, ...json } };
+    } catch (error) {
+      console.error(`❌ dataProvider.update(${resource}, ${params.id}) 發生錯誤:`, error);
+      return Promise.reject(error);
+    }
+  },
 
   create: async (resource, params) => {
     const url = `${apiUrl}/cases`;
