@@ -196,35 +196,35 @@ const dataProvider = {
     }
   },
 
-delete: async (resource, params) => {
-  let url;
+  delete: async (resource, params) => {
+    let url;
 
-  switch (resource) {
-    case "users":
-      url = `${apiUrl}/users/${params.id}`;
-      break;
-    case "student_cases":
-    case "tutor_cases":
-    case "pending_cases":
-    case "cases":
-      url = `${apiUrl}/cases/${params.id}`;
-      break;
-    default:
-      console.warn(`❌ 無法識別的 resource: ${resource}`);
-      return Promise.reject(new Error(`Unknown resource: ${resource}`));
-  }
+    switch (resource) {
+      case "users":
+        url = `${apiUrl}/users/${params.id}`;
+        break;
+      case "student_cases":
+      case "tutor_cases":
+      case "pending_cases":
+      case "cases":
+        url = `${apiUrl}/cases/${params.id}`;
+        break;
+      default:
+        console.warn(`❌ 無法識別的 resource: ${resource}`);
+        return Promise.reject(new Error(`Unknown resource: ${resource}`));
+    }
 
-  console.log(`📌 dataProvider.delete(resource: ${resource}, id: ${params.id}) => ${url}`);
+    console.log(`📌 dataProvider.delete(resource: ${resource}, id: ${params.id}) => ${url}`);
 
-  try {
-    await httpClient(url, { method: "DELETE" });
-    console.log("✅ API 刪除成功");
-    return { data: { id: params.id } };
-  } catch (error) {
-    console.error(`❌ dataProvider.delete(${resource}, ${params.id}) 發生錯誤:`, error);
-    return Promise.reject(error);
-  }
-},
-
+    try {
+      await httpClient(url, { method: "DELETE" });
+      console.log("✅ API 刪除成功");
+      return { data: { id: params.id } };
+    } catch (error) {
+      console.error(`❌ dataProvider.delete(${resource}, ${params.id}) 發生錯誤:`, error);
+      return Promise.reject(error);
+    }
+  },
+};
 
 export default dataProvider;
