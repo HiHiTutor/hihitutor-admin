@@ -1,6 +1,6 @@
 import { fetchUtils } from "react-admin";
 
-const apiUrl = 'https://hihitutor-backend.onrender.com/api';
+const apiUrl = process.env.REACT_APP_API_BASE_URL || 'https://hihitutor-backend.onrender.com/api';
 
 const httpClient = async (url, options = {}) => {
   options.headers = new Headers(options.headers || {});
@@ -196,21 +196,35 @@ const dataProvider = {
     }
   },
 
-  delete: async (resource, params) => {
-    const url = `${apiUrl}/cases/${params.id}`;
-    console.log(`📌 dataProvider.delete(resource: ${resource}, id: ${params.id}) => ${url}`);
+delete: async (resource, params) => {
+  let url;
 
-    try {
-      await httpClient(url, { method: "DELETE" });
+  switch (resource) {
+    case "users":
+      url = `${apiUrl}/users/${params.id}`;
+      break;
+    case "student_cases":
+    case "tutor_cases":
+    case "pending_cases":
+    case "cases":
+      url = `${apiUrl}/cases/${params.id}`;
+      break;
+    default:
+      console.warn(`❌ 無法識別的 resource: ${resource}`);
+      return Promise.reject(new Error(`Unknown resource: ${resource}`));
+  }
 
-      console.log("✅ API 刪除成功");
+  console.log(`📌 dataProvider.delete(resource: ${resource}, id: ${params.id}) => ${url}`);
 
-      return { data: { id: params.id } };
-    } catch (error) {
-      console.error(`❌ dataProvider.delete(${resource}, ${params.id}) 發生錯誤:`, error);
-      return Promise.reject(error);
-    }
-  },
-};
+  try {
+    await httpClient(url, { method: "DELETE" });
+    console.log("✅ API 刪除成功");
+    return { data: { id: params.id } };
+  } catch (error) {
+    console.error(`❌ dataProvider.delete(${resource}, ${params.id}) 發生錯誤:`, error);
+    return Promise.reject(error);
+  }
+},
+
 
 export default dataProvider;

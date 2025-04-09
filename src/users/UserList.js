@@ -8,27 +8,41 @@ import {
   FunctionField
 } from "react-admin";
 
-const UserList = (props) => (
-  <List {...props}>
-    <Datagrid rowClick="show">
-      <TextField source="id" label="ID" />
+const UserList = (props) => {
+  // 加 rowStyle 函數：有未審批 profile 時整行變黃
+  const rowStyle = (record) => {
+    const latest = JSON.stringify(record.profile?.latestProfile || {});
+    const approved = JSON.stringify(record.profile?.approvedProfile || {});
+    const hasPending = latest !== approved;
 
-      {/* ✅ 改動這裡：直接比對 latestProfile vs approvedProfile */}
-      <FunctionField
-        label="名稱"
-        render={(record) => {
-          const latest = JSON.stringify(record.profile?.latestProfile || {});
-          const approved = JSON.stringify(record.profile?.approvedProfile || {});
-          const hasPending = latest !== approved;
-          return hasPending ? `${record.name} 🟡` : record.name;
-        }}
-      />
+    return hasPending ? { backgroundColor: "#fff7cc" } : {};
+  };
 
-      <EmailField source="email" label="電郵" />
-      <TextField source="role" label="角色" />
-      <DateField source="createdAt" label="創立日期" showTime />
-    </Datagrid>
-  </List>
-);
+  return (
+    <List {...props}>
+      <Datagrid rowClick="show" rowStyle={rowStyle}>
+        <TextField source="userCode" label="用戶編號" />
+
+        <FunctionField
+          label="名稱"
+          render={(record) => {
+            const latest = JSON.stringify(record.profile?.latestProfile || {});
+            const approved = JSON.stringify(record.profile?.approvedProfile || {});
+            const hasPending = latest !== approved;
+            return hasPending ? `${record.name} 🟡` : record.name;
+          }}
+        />
+
+        <TextField source="phone" label="電話號碼" />
+        <EmailField source="email" label="電郵" />
+        <FunctionField
+          label="標籤"
+          render={(record) => record.tags?.join(", ")}
+        />
+        <DateField source="createdAt" label="創立日期" showTime />
+      </Datagrid>
+    </List>
+  );
+};
 
 export default UserList;
