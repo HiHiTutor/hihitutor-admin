@@ -145,42 +145,69 @@ const dataProvider = {
     }
   },
 
-  update: async (resource, params) => {
-    let url;
+update: async (resource, params) => {
+  let url;
+  switch (resource) {
+    case "users":
+      url = `${apiUrl}/users/${params.id}`;
+      break;
+    case "student_cases":
+    case "tutor_cases":
+    case "pending_cases":
+    case "cases":
+      url = `${apiUrl}/cases/${params.id}`;
+      break;
+    default:
+      console.warn(`❌ 無法識別的 resource: ${resource}`);
+      return Promise.reject(new Error(`Unknown resource: ${resource}`));
+  }
 
-    switch (resource) {
-      case "users":
-        url = `${apiUrl}/users/${params.id}`;
-        break;
-      case "student_cases":
-      case "tutor_cases":
-      case "pending_cases":
-      case "cases":
-        url = `${apiUrl}/cases/${params.id}`;
-        break;
-      default:
-        console.warn(`❌ 無法識別的 resource: ${resource}`);
-        return Promise.reject(new Error(`Unknown resource: ${resource}`));
+  // ✅ 若包含 organizationDocs，使用 FormData 上傳文件
+  if (resource === "users" && params.data.organizationDocs) {
+    console.log("📌 使用 FormData 上傳機構文件:", params.data.organizationDocs);
+    const formData = new FormData();
+
+    // 加入機構文件
+    const docs = params.data.organizationDocs;
+    if (docs.br?.rawFile) formData.append("br", docs.br.rawFile);
+    if (docs.cr?.rawFile) formData.append("cr", docs.cr.rawFile);
+    if (docs.addressProof?.rawFile) formData.append("addressProof", docs.addressProof.rawFile);
+
+    // 加入其他欄位
+    for (const key in params.data) {
+      if (key !== "organizationDocs") {
+        formData.append(key, params.data[key]);
+      }
     }
 
-    console.log(`📌 dataProvider.update(resource: ${resource}, id: ${params.id}) => ${url}`);
-    console.log("📌 發送更新數據:", params.data);
+    const response = await fetch(url, {
+      method: "PUT",
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("authToken")}`,
+      },
+      body: formData,
+    });
+    const json = await response.json();
 
-    try {
-      const { json } = await httpClient(url, {
-        method: "PUT",
-        body: JSON.stringify(params.data),
-      });
+    return { data: { id: json.user._id || params.id, ...json.user } };
+  }
 
-      console.log("✅ API 更新回應:", json);
+  // ✅ 普通情況：原本 JSON 更新邏輯
+  console.log(`📌 JSON update(resource: ${resource}, id: ${params.id}) => ${url}`);
+  console.log("📌 發送更新數據:", params.data);
 
-      return { data: { id: json._id || params.id, ...json } };
-    } catch (error) {
-      console.error(`❌ dataProvider.update(${resource}, ${params.id}) 發生錯誤:`, error);
-      return Promise.reject(error);
-    }
-  },
+  try {
+    const { json } = await httpClient(url, {
+      method: "PUT",
+      body: JSON.stringify(params.data),
+    });
 
+    return { data: { id: json._id || params.id, ...json } };
+  } catch (error) {
+    console.error(`❌ dataProvider.update(${resource}, ${params.id}) 發生錯誤:`, error);
+    return Promise.reject(error);
+  }
+}
   create: async (resource, params) => {
     const url = `${apiUrl}/cases`;
     console.log(`📌 dataProvider.create(resource: ${resource}) => ${url}`);
