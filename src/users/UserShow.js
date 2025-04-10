@@ -11,6 +11,7 @@ import {
   useRecordContext,
 } from "react-admin";
 import ApproveProfileButton from "./ApproveProfileButton";
+import ApproveOrganizationButton from "./ApproveOrganizationButton";
 import { Box, Typography } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@mui/material";
@@ -29,6 +30,44 @@ const PendingStatusAlert = () => {
     </Box>
   ) : null;
 };
+
+const OrgDocsSection = () => {
+  const record = useRecordContext();
+  const docs = record?.organizationDocs;
+
+  if (!docs?.br && !docs?.cr && !docs?.addressProof) return null;
+
+  return (
+    <Box sx={{ mt: 4 }}>
+      <Typography variant="h6">📁 機構註冊文件</Typography>
+      {docs.br && (
+        <Box sx={{ my: 1 }}>
+          <Typography variant="subtitle1">BR（商業登記）</Typography>
+          <a href={`/${docs.br}`} target="_blank" rel="noopener noreferrer">
+            檢視 BR 文件
+          </a>
+        </Box>
+      )}
+      {docs.cr && (
+        <Box sx={{ my: 1 }}>
+          <Typography variant="subtitle1">CR（公司註冊證）</Typography>
+          <a href={`/${docs.cr}`} target="_blank" rel="noopener noreferrer">
+            檢視 CR 文件
+          </a>
+        </Box>
+      )}
+      {docs.addressProof && (
+        <Box sx={{ my: 1 }}>
+          <Typography variant="subtitle1">地址證明</Typography>
+          <a href={`/${docs.addressProof}`} target="_blank" rel="noopener noreferrer">
+            檢視地址證明
+          </a>
+        </Box>
+      )}
+    </Box>
+  );
+};
+
 
 const ProfileSection = ({ title, prefix }) => (
   <Box sx={{ mt: 4 }}>
@@ -95,6 +134,7 @@ const UserShow = (props) => {
         <TextField source="age" label="年齡" />
         <TextField source="phone" label="電話" />
         <TextField source="userType" label="用戶類型" />
+        <OrgDocsSection />
         <TextField source="profileStatus" label="個人檔案狀態" />
         <DateField source="createdAt" label="註冊日期" showTime />
 
@@ -102,6 +142,7 @@ const UserShow = (props) => {
         <ProfileSection title="🟢 已審批導師資料（approvedProfile）" prefix="profile.approvedProfile" />
 
         <ApproveProfileButton />
+        <ApproveOrganizationButton />
 
         <Button
           variant="outlined"
