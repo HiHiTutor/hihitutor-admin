@@ -1,4 +1,3 @@
-// 📁 src/users/ApproveOrganizationButton.js
 import React from "react";
 import { useNotify, useRefresh, useRedirect, useRecordContext } from "react-admin";
 
@@ -14,7 +13,8 @@ const ApproveOrganizationButton = () => {
 
   const handleApprove = async () => {
     try {
-      const response = await fetch(`http://localhost:5000/api/users/${record.id}`, {
+      const apiUrl = process.env.REACT_APP_API_BASE_URL || "http://localhost:5000/api"; // 這裡使用環境變量
+      const response = await fetch(`${apiUrl}/users/${record.id}`, {
         method: "PUT",
         headers: {
           "Authorization": `Bearer ${localStorage.getItem("authToken")}`,
