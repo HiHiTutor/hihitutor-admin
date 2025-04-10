@@ -1,6 +1,7 @@
 import { fetchUtils } from "react-admin";
-
+// 顯示 API URL 設置
 const apiUrl = process.env.REACT_APP_API_BASE_URL || 'https://hihitutor-backend.onrender.com/api';
+console.log("🔧 正在使用 API BASE:", apiUrl);
 
 const httpClient = async (url, options = {}) => {
   options.headers = new Headers(options.headers || {});
