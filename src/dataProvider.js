@@ -111,6 +111,9 @@ const dataProvider = {
     let url;
 
     switch (resource) {
+      case "approve_organization":
+        url = `${apiUrl}/users/approve-organization/${params.id}`;
+        break;
       case "users":
         url = `${apiUrl}/users/${params.id}`;
         break;
@@ -124,6 +127,7 @@ const dataProvider = {
         console.warn(`❌ 無法識別的 resource: ${resource}`);
         return Promise.reject(new Error(`Unknown resource: ${resource}`));
     }
+    
 
     console.log(`📌 dataProvider.getOne(resource: ${resource}, id: ${params.id}) => ${url}`);
 
