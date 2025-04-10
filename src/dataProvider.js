@@ -207,7 +207,7 @@ update: async (resource, params) => {
     console.error(`❌ dataProvider.update(${resource}, ${params.id}) 發生錯誤:`, error);
     return Promise.reject(error);
   }
-}
+},
   create: async (resource, params) => {
     const url = `${apiUrl}/cases`;
     console.log(`📌 dataProvider.create(resource: ${resource}) => ${url}`);
