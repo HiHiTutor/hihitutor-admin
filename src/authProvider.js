@@ -13,8 +13,20 @@ const authProvider = {
       throw new Error("登入失敗");
     }
 
-    const data = await res.json();
-    localStorage.setItem("authToken", data.token);
+const data = await res.json();
+
+// 🔐 解碼 JWT token（拿到角色）
+const token = data.token;
+const payload = JSON.parse(atob(token.split(".")[1]));
+const role = payload.user.role;
+
+// ✅ 檢查是否 admin，否則不給登入
+if (role !== "admin") {
+  throw new Error("你沒有權限登入後台");
+}
+
+// ✅ 儲存 token（照用原本 key）
+localStorage.setItem("authToken", token);
   },
 
   logout: () => {
