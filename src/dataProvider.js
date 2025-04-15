@@ -138,13 +138,12 @@ const dataProvider = {
         throw new Error(`❌ 無效的 API 回應: ${JSON.stringify(json)}`);
       }
 
-      return { data: { id: json._id || json.id, ...json } };
-    } catch (error) {
-      console.error(`❌ dataProvider.getOne(${resource}, ${params.id}) 發生錯誤:`, error);
-      return Promise.reject(error);
-    }
-  },
-
+  return { data: { id: json._id || json.id, ...json } };
+} catch (error) {
+  console.error(`❌ dataProvider.getOne(${resource}, ${params.id}) 發生錯誤:`, error);
+  return Promise.reject(error);
+};
+}, // ✅ 補返呢個逗號！
 update: async (resource, params) => {
   let url;
   switch (resource) {
