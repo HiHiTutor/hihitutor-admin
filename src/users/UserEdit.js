@@ -58,16 +58,8 @@ const UserEdit = (props) => (
       </ImageInput>
 {/* ✅ 機構用戶：上傳 BR / CR / 地址證明 */}
 <ImageInput
-  source="organizationDocs.br"
+  source="organizationDocs.businessRegistration"
   label="商業登記（BR）"
-  accept="image/*,application/pdf"
->
-  <ImageField source="src" title="title" />
-</ImageInput>
-
-<ImageInput
-  source="organizationDocs.cr"
-  label="公司註冊證（CR）"
   accept="image/*,application/pdf"
 >
   <ImageField source="src" title="title" />
