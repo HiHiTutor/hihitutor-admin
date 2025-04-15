@@ -13,7 +13,7 @@ const ApproveOrganizationButton = () => {
 
   const handleApprove = async () => {
     try {
-      const apiUrl = process.env.REACT_APP_API_BASE_URL || "http://localhost:5000/api"; // 這裡使用環境變量
+      const apiUrl = "https://hihitutor-backend.onrender.com/api";  // 直接使用生產環境 URL
       const response = await fetch(`${apiUrl}/users/${record.id}`, {
         method: "PUT",
         headers: {
