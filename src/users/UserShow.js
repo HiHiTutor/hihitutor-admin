@@ -16,6 +16,7 @@ import { Box, Typography } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@mui/material";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
+import { getFileUrl } from "../api";
 
 
 const PendingStatusAlert = () => {
@@ -43,7 +44,7 @@ const OrgDocsSection = () => {
       {docs.br && (
         <Box sx={{ my: 1 }}>
           <Typography variant="subtitle1">BR（商業登記）</Typography>
-          <a href={`/${docs.br}`} target="_blank" rel="noopener noreferrer">
+          <a href={getFileUrl(docs.br)} target="_blank" rel="noopener noreferrer">
             檢視 BR 文件
           </a>
         </Box>
@@ -51,7 +52,7 @@ const OrgDocsSection = () => {
       {docs.cr && (
         <Box sx={{ my: 1 }}>
           <Typography variant="subtitle1">CR（公司註冊證）</Typography>
-          <a href={`/${docs.cr}`} target="_blank" rel="noopener noreferrer">
+          <a href={getFileUrl(docs.cr)} target="_blank" rel="noopener noreferrer">
             檢視 CR 文件
           </a>
         </Box>
@@ -59,7 +60,7 @@ const OrgDocsSection = () => {
       {docs.addressProof && (
         <Box sx={{ my: 1 }}>
           <Typography variant="subtitle1">地址證明</Typography>
-          <a href={`/${docs.addressProof}`} target="_blank" rel="noopener noreferrer">
+          <a href={getFileUrl(docs.addressProof)} target="_blank" rel="noopener noreferrer">
             檢視地址證明
           </a>
         </Box>
